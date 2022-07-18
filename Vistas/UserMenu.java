@@ -28,35 +28,69 @@ public class UserMenu extends javax.swing.JFrame {
     }
 
     private void listarEmpleados() {
-        String queryConsulta = "SELECT * FROM empleados";
-        try {
-            connection = conexion.getConnection();
-            st = connection.createStatement();
-            rs = st.executeQuery(queryConsulta);
+        String filtroBusqueda = txtSearch.getText();
+        if (filtroBusqueda.isEmpty()) {
 
-            // que existen en la base de datos
-            Object[] empleados = new Object[6];
-            contenidoTablaEmpleados = (DefaultTableModel) tblEmpleados.getModel();
-            // Mientras el resultado del queryConsulta encuentre registros en la
-            // base de datos se ingresa al while
-            while (rs.next()) {
-                empleados[0] = rs.getInt("idEmp");
-                empleados[1] = rs.getString("nombreEmp");
-                empleados[2] = rs.getString("apellidos");
-                empleados[3] = rs.getString("tipoDocumento");
-                empleados[4] = rs.getString("documento");
-                empleados[5] = rs.getString("correo");
-                contenidoTablaEmpleados.addRow(empleados);
-                System.out.println("idEmp" + empleados[0] + " ,Nombre  " + empleados[1] + " , apellidos  " + empleados[2] + ", tipo documento: " + empleados[3] + " , N· : " + empleados[4] + " , Correo " + empleados[5]);
+            String queryConsulta = "SELECT * FROM empleados";
+            try {
+                connection = conexion.getConnection();
+                st = connection.createStatement();
+                rs = st.executeQuery(queryConsulta);
+
+                // que existen en la base de datos
+                Object[] empleados = new Object[6];
+                contenidoTablaEmpleados = (DefaultTableModel) tblEmpleados.getModel();
+                // Mientras el resultado del queryConsulta encuentre registros en la
+                // base de datos se ingresa al while
+                while (rs.next()) {
+                    empleados[0] = rs.getInt("idEmp");
+                    empleados[1] = rs.getString("nombreEmp");
+                    empleados[2] = rs.getString("apellidos");
+                    empleados[3] = rs.getString("tipoDocumento");
+                    empleados[4] = rs.getString("documento");
+                    empleados[5] = rs.getString("correo");
+                    contenidoTablaEmpleados.addRow(empleados);
+                    System.out.println("idEmp" + empleados[0] + " ,Nombre  " + empleados[1] + " , apellidos  " + empleados[2] + ", tipo documento: " + empleados[3] + " , N· : " + empleados[4] + " , Correo " + empleados[5]);
+                    tblEmpleados.setModel(contenidoTablaEmpleados);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error");
             }
 
-            tblEmpleados.setModel(contenidoTablaEmpleados);
-        } catch (SQLException e) {
-            System.out.println("Error");
+        } else {
+            String queryConsulta = "SELECT * FROM empleados WHERE nombreEmp LIKE '%" + filtroBusqueda + "%' OR  apellidos LIKE '%" + filtroBusqueda + "%'";
+            System.out.println("");
+
+            try {
+                connection = conexion.getConnection();
+                st = connection.createStatement();
+                rs = st.executeQuery(queryConsulta);
+
+                // que existen en la base de datos
+                Object[] empleados = new Object[6];
+                contenidoTablaEmpleados = (DefaultTableModel) tblEmpleados.getModel();
+                // Mientras el resultado del queryConsulta encuentre registros en la
+                // base de datos se ingresa al while
+                while (rs.next()) {
+                    empleados[0] = rs.getInt("idEmp");
+                    empleados[1] = rs.getString("nombreEmp");
+                    empleados[2] = rs.getString("apellidos");
+                    empleados[3] = rs.getString("tipoDocumento");
+                    empleados[4] = rs.getString("documento");
+                    empleados[5] = rs.getString("correo");
+                    contenidoTablaEmpleados.addRow(empleados);
+                    System.out.println("idEmp" + empleados[0] + " ,Nombre  " + empleados[1] + " , apellidos  " + empleados[2] + ", tipo documento: " + empleados[3] + " , N· : " + empleados[4] + " , Correo " + empleados[5]);
+                    tblEmpleados.setModel(contenidoTablaEmpleados);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error");
+
+            }
+        }
 
         }
 
-    }
+    
 
     private void borrarDatosTabla() {
         for (int i = 0; i < tblEmpleados.getRowCount(); i++) {
@@ -66,8 +100,6 @@ public class UserMenu extends javax.swing.JFrame {
         }
 
     }
-    
-   
 
     @SuppressWarnings("unchecked")
 
@@ -85,6 +117,8 @@ public class UserMenu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnAddUser = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        txtSearch = new javax.swing.JTextField();
+        btnBusqueda = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
 
@@ -171,43 +205,59 @@ public class UserMenu extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/logo.png"))); // NOI18N
 
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        btnBusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/showUser.png"))); // NOI18N
+        btnBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBusquedaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(209, 209, 209)
+                                .addGap(94, 94, 94)
                                 .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAddUser))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 104, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 776, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(111, 111, 111))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 776, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(26, 26, 26)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                        .addGap(63, 63, 63))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSearch)
+                            .addComponent(btnBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnAddUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tbEmpleados.addTab("Empleados", jPanel3);
@@ -216,7 +266,7 @@ public class UserMenu extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1001, Short.MAX_VALUE)
+            .addGap(0, 795, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,7 +279,7 @@ public class UserMenu extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1001, Short.MAX_VALUE)
+            .addGap(0, 795, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,8 +293,9 @@ public class UserMenu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tbEmpleados)
-                .addContainerGap())
+                .addContainerGap()
+                .addComponent(tbEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 802, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -291,6 +342,17 @@ public class UserMenu extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tblEmpleadosMouseClicked
 
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaActionPerformed
+        borrarDatosTabla();
+        listarEmpleados();
+
+
+    }//GEN-LAST:event_btnBusquedaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -328,6 +390,7 @@ public class UserMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
+    private javax.swing.JButton btnBusqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -340,6 +403,7 @@ public class UserMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane tbEmpleados;
     private javax.swing.JTable tblEmpleados;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
 }

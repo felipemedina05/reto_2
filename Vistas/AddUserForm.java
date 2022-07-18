@@ -1,4 +1,3 @@
-
 package Vistas;
 
 import javax.swing.JOptionPane;
@@ -7,12 +6,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
 
 
 public class AddUserForm extends javax.swing.JDialog {
     
+        
         Conexion conexion = new Conexion ();
         Connection connection;
         Statement st;
@@ -23,8 +25,8 @@ public class AddUserForm extends javax.swing.JDialog {
         super(parent, modal);
         this.setLocationRelativeTo(parent);
         initComponents();
+        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -96,7 +98,7 @@ public class AddUserForm extends javax.swing.JDialog {
             }
         });
 
-        cbtipoDocumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cédula de ciudadanía", "Cédula extranjera", "Pasaporte", "Libreta militar" }));
+        cbtipoDocumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cedula", "Cedula Extrangeira", "Pasaporte" }));
         cbtipoDocumento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbtipoDocumentoActionPerformed(evt);
